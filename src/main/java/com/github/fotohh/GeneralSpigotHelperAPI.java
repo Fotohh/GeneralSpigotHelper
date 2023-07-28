@@ -14,7 +14,39 @@ public class GeneralSpigotHelperAPI {
     /**
      * Represents a command registration containing the CommandExecutor and the command name.
      */
-    record CommandRegister(CommandExecutor commandExecutor, String commandName) {}
+    public static class CommandRegister {
+        private final CommandExecutor commandExecutor;
+        private final String commandName;
+
+        /**
+         * Constructs a new CommandRegister with the specified CommandExecutor and command name.
+         *
+         * @param commandExecutor The CommandExecutor to set for the command.
+         * @param commandName     The name of the command.
+         */
+        public CommandRegister(CommandExecutor commandExecutor, String commandName) {
+            this.commandExecutor = commandExecutor;
+            this.commandName = commandName;
+        }
+
+        /**
+         * Gets the CommandExecutor associated with the command.
+         *
+         * @return The CommandExecutor.
+         */
+        public CommandExecutor getCommandExecutor() {
+            return commandExecutor;
+        }
+
+        /**
+         * Gets the name of the command.
+         *
+         * @return The command name.
+         */
+        public String getCommandName() {
+            return commandName;
+        }
+    }
 
     private final JavaPlugin plugin;
 
@@ -34,7 +66,7 @@ public class GeneralSpigotHelperAPI {
      */
     public void registerCommands(CommandRegister... register) {
         for (CommandRegister cmd : register) {
-            plugin.getCommand(cmd.commandName).setExecutor(cmd.commandExecutor);
+            plugin.getCommand(cmd.getCommandName()).setExecutor(cmd.getCommandExecutor());
         }
     }
 
@@ -46,5 +78,4 @@ public class GeneralSpigotHelperAPI {
     public void registerListeners(Listener... listeners) {
         Arrays.stream(listeners).forEach(listener -> plugin.getServer().getPluginManager().registerEvents(listener, plugin));
     }
-
 }
