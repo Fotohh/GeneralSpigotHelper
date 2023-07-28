@@ -6,17 +6,17 @@ packed with a multitude of helpers in speeding up the plugin-making process
 Repository: 
 ```xml
 <repositories>
-	<repository>
-		<id>jitpack.io</id>
-		<url>https://jitpack.io</url>
-	</repository>
+   <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+   </repository>
 </repositories>
 ```
 Dependency:
 ``` xml
 <dependency>
-	<groupId>com.github.Fotohh</groupId>
-	<artifactId>GeneralSpigotHelper</artifactId>
-	<version>1.0.1</version>
+   <groupId>com.github.Fotohh</groupId>
+   <artifactId>GeneralSpigotHelper</artifactId>
+   <version>1.0.1</version>
 </dependency>
 ```
