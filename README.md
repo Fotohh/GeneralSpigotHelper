@@ -8,7 +8,7 @@ GeneralSpigotHelper is a library packed with a multitude of helpers designed to 
 
 ## Installation
 
-To use GeneralSpigotHelper in your project, you can add it as a dependency through [JitPack](https://jitpack.io/). Follow the steps below to add the library to your project:
+To use GeneralSpigotHelper in your project, you can add it as a dependency through [JitPack](https://jitpack.io/#Fotohh/GeneralSpigotHelper/1.0.1). Follow the steps below to add the library to your project:
 
 ```xml
 <repositories>
