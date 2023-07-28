@@ -99,10 +99,11 @@ public class GeneralUtility {
      */
     public boolean isValid(@NotNull CommandSender sender, String... perms){
 
-        if(!(sender instanceof Player player)){
+        if(!(sender instanceof Player)){
             message(sender,senderNotPlayer);
             return false;
         }
+        Player player = (Player) sender;
         int length = perms.length;
         int i = 0;
         for(String perm : perms) {
@@ -233,10 +234,11 @@ public class GeneralUtility {
      */
     public boolean isValid(@NotNull CommandSender sender, YMLFile file, String... perms){
 
-        if(!(sender instanceof Player player)){
+        if(!(sender instanceof Player)){
             message(sender, senderNotPlayer, file);
             return false;
         }
+        Player player = (Player) sender;
         int length = perms.length;
         int i = 0;
         for(String perm : perms) {

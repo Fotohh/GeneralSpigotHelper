@@ -54,7 +54,7 @@ public class ItemBuilder extends ItemStack {
      * @return The ItemBuilder instance to allow method chaining.
      */
     public ItemBuilder addEnchantment(EnchantmentBuilder enchantmentBuilder) {
-        itemMeta.addEnchant(enchantmentBuilder.enchantment(), enchantmentBuilder.level(), enchantmentBuilder.value());
+        itemMeta.addEnchant(enchantmentBuilder.getEnchantment(), enchantmentBuilder.getLevel(), enchantmentBuilder.isIgnoreLevelRestriction());
         return this;
     }
 
