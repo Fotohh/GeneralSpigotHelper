@@ -8,12 +8,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The general utility class can be extended and used pretty much anywhere you'd like. It has a multitude of features which makes your code a lot shorter and saves you time.
+ */
 public class GeneralUtility {
 
     private final YMLFile file;
     private final Defaults prefix, noPermission, invalidPlayer, senderNotPlayer;
 
-    public GeneralUtility(YMLFile file, Defaults prefix, Defaults noPermission, Defaults invalidPlayer, Defaults senderNotPlayer) {
+    /**
+     * Constructs a new GeneralUtility with the specified YMLFile and default values for different cases.
+     *
+     * @param file            The YMLFile representing the configuration file.
+     * @param prefix          The default value for the prefix.
+     * @param noPermission    The default value for the "no permission" case.
+     * @param invalidPlayer   The default value for the "invalid player" case.
+     * @param senderNotPlayer The default value for the "sender is not a player" case.
+     * @throws RuntimeException if the defaults were not found in the YMLFile.
+     */
+    public GeneralUtility(@NotNull YMLFile file, Defaults prefix, Defaults noPermission, Defaults invalidPlayer, Defaults senderNotPlayer) {
         this.file = file;
         this.prefix = prefix;
         this.noPermission = noPermission;
