@@ -28,7 +28,7 @@ Remember to replace "Tag" with the latest version available.
 </dependency>
 ```
 
-Javadoc: ![Javadoc](https://javadoc.jitpack.io/com/github/Fotohh/GeneralSpigotHelper/1.0.2/javadoc/)
+Javadoc: [Javadoc](https://javadoc.jitpack.io/com/github/Fotohh/GeneralSpigotHelper/1.0.2/javadoc/)
 
 ## Usage
 
