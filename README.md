@@ -18,15 +18,13 @@ To use GeneralSpigotHelper in your project, you can add it as a dependency throu
    </repository>
 </repositories>
 ```
+Remember to replace "Tag" with the latest version available.
+
 ```xml
 <dependency>
    <groupId>com.github.Fotohh</groupId>
    <artifactId>GeneralSpigotHelper</artifactId>
-   <version>
-```
-![GeneralSpigotHelper](https://jitpack.io/v/Fotohh/GeneralSpigotHelper.svg)
-```
-</version>
+   <version>Tag</version>
 </dependency>
 ```
 
