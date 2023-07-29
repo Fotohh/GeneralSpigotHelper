@@ -24,7 +24,7 @@ To use GeneralSpigotHelper in your project, you can add it as a dependency throu
    <artifactId>GeneralSpigotHelper</artifactId>
    <version>
 ```
-[JitPack](https://jitpack.io/#Fotohh/GeneralSpigotHelper/1.0.1) 
+![GeneralSpigotHelper](https://jitpack.io/v/Fotohh/GeneralSpigotHelper.svg)
 ```
 </version>
 </dependency>
