@@ -1,0 +1,37 @@
+# GeneralSpigotHelper
+
+![GeneralSpigotHelper](https://jitpack.io/v/Fotohh/GeneralSpigotHelper.svg)
+
+## Overview
+
+GeneralSpigotHelper is a library packed with a multitude of helpers designed to speed up the plugin-making process in Spigot-based Minecraft plugins. It provides various utility classes and methods to simplify common tasks like registering commands, event listeners, working with configuration files, and more.
+
+## Installation
+
+To use GeneralSpigotHelper in your project, you can add it as a dependency through [JitPack](https://jitpack.io/#Fotohh/GeneralSpigotHelper/1.0.1). Follow the steps below to add the library to your project:
+
+```xml
+<repositories>
+   <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+   </repository>
+</repositories>
+```
+Remember to replace "Tag" with the latest version available.
+
+```xml
+<dependency>
+   <groupId>com.github.Fotohh</groupId>
+   <artifactId>GeneralSpigotHelper</artifactId>
+   <version>Tag</version>
+</dependency>
+```
+
+## Usage
+
+### TODO
+
+## License
+
+This library is licensed under the [MIT License](LICENSE).
