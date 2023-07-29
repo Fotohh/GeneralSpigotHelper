@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The general utility class can be extended and used pretty much anywhere you'd like. It has a multitude of features which makes your code a lot shorter and saves you time.
+ * The GeneralUtility class provides a set of general utility methods that can be used anywhere in a Bukkit plugin.
+ * It includes methods for sending formatted messages with prefixes, checking player permissions, and validating players.
+ * The class is intended to simplify common tasks and save development time.
  */
 public class GeneralUtility {
 
@@ -61,7 +63,7 @@ public class GeneralUtility {
     }
 
     /**
-     *
+     * Checks if the target has the required permissions
      * @param player the target to check
      * @param perms perms to check
      * @return true if player has perms, false if not
@@ -79,7 +81,7 @@ public class GeneralUtility {
     }
 
     /**
-     *
+     *Checks if the target is valid
      * @param sender the target to check
      * @return true if sender is valid, false if not
      */
@@ -92,7 +94,7 @@ public class GeneralUtility {
     }
 
     /**
-     *
+     *Checks if the target is valid
      * @param sender the target to check
      * @param perms perms to check
      * @return true if sender is valid, false if not
@@ -150,7 +152,7 @@ public class GeneralUtility {
 
     /**
      * Returns the string color coded using {@link ChatColor#translateAlternateColorCodes(char, String)}.
-     * Default is the '&' character. If you want to use your own alternate color code use the method {@link GeneralUtility#chat(String, char)}
+     * Default is the {@literal &} character. If you want to use your own alternate color code use the method {@link GeneralUtility#chat(String, char)}
      * @param s The message
      * @return the color coded message
      */
@@ -194,7 +196,7 @@ public class GeneralUtility {
     }
 
     /**
-     *
+     *Checks if the target has permission
      * @param player the target to check
      * @param perms perms to check
      * @return true if player has perms, false if not
@@ -212,7 +214,7 @@ public class GeneralUtility {
     }
 
     /**
-     *
+     *Checks if the target is valid
      * @param sender the target to check
      * @return true if sender is valid, false if not
      */
@@ -227,7 +229,7 @@ public class GeneralUtility {
     }
 
     /**
-     *
+     *Checks if the target is valid
      * @param sender the target to check
      * @param perms perms to check
      * @return true if sender is valid, false if not
