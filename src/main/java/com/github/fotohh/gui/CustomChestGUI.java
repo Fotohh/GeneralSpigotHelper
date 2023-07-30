@@ -1,5 +1,6 @@
 package com.github.fotohh.gui;
 
+import com.github.fotohh.itemutil.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,6 +23,11 @@ public class CustomChestGUI implements Listener,GUI {
         this.title = title;
         this.inventory = Bukkit.createInventory(player, size, title);
         Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public ItemManager getItemManager() {
+        return new ItemManager(this);
     }
 
     @Override
