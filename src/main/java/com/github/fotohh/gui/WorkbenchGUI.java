@@ -1,5 +1,6 @@
 package com.github.fotohh.gui;
 
+import com.github.fotohh.itemutil.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,11 @@ public class WorkbenchGUI implements Listener,GUI {
     @Override
     public void unregisterListener() {
         HandlerList.unregisterAll(this);
+    }
+
+    @Override
+    public ItemManager getItemManager() {
+        return new ItemManager(this);
     }
 
     @Override

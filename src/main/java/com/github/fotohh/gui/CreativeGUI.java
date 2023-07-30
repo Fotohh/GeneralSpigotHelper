@@ -1,5 +1,6 @@
 package com.github.fotohh.gui;
 
+import com.github.fotohh.itemutil.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,6 +59,11 @@ public class CreativeGUI implements Listener,GUI {
     @Override
     public void onInventoryClick(Consumer<InventoryClickEvent> eventConsumer) {
         this.clickEventConsumer = eventConsumer;
+    }
+
+    @Override
+    public ItemManager getItemManager() {
+        return new ItemManager(this);
     }
 
     @EventHandler

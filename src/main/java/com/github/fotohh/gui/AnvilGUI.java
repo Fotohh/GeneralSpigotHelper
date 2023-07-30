@@ -1,8 +1,8 @@
 package com.github.fotohh.gui;
 
+import com.github.fotohh.itemutil.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -23,6 +23,11 @@ public class AnvilGUI implements GUI, Listener {
         this.title = title;
         this.inventory = Bukkit.createInventory(player, InventoryType.ANVIL, title);
         Bukkit.getPluginManager().registerEvents(this, plugin);
+    }
+
+    @Override
+    public ItemManager getItemManager() {
+        return new ItemManager(this);
     }
 
     @Override

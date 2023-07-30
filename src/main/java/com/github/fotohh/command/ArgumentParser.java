@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 /**
- * The CommandUtils class provides utility methods for parsing command arguments into different data types.
+ * The ArgumentParser class provides utility methods for parsing command arguments into different data types.
  */
-public class CommandUtils {
+public class ArgumentParser {
 
     /**
      * Parses the provided argument into an integer.

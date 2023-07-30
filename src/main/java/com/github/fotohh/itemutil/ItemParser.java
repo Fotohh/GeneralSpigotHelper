@@ -1,14 +1,13 @@
 
 package com.github.fotohh.itemutil;
 
-import org.bukkit.inventory.ItemStack;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,36 +27,36 @@ public class ItemParser {
      * @return The JSON string representing the ItemStack.
      */
     public static String serializeItemStack(ItemStack itemStack) {
-        JSONObject jsonObject = new JSONObject();
+        JsonObject jsonObject = new JsonObject();
 
-        jsonObject.put("material", itemStack.getType().name());
-        jsonObject.put("amount", itemStack.getAmount());
+        jsonObject.addProperty("material", itemStack.getType().name());
+        jsonObject.addProperty("amount", itemStack.getAmount());
 
         if (itemStack.hasItemMeta()) {
             ItemMeta meta = itemStack.getItemMeta();
 
             if (meta.hasDisplayName()) {
-                jsonObject.put("display_name", meta.getDisplayName());
+                jsonObject.addProperty("display_name", meta.getDisplayName());
             }
 
             if (meta.hasLore()) {
-                JSONArray loreArray = new JSONArray();
+                JsonArray loreArray = new JsonArray();
                 for (String lore : meta.getLore()) {
                     loreArray.add(lore);
                 }
-                jsonObject.put("lore", loreArray);
+                jsonObject.add("lore", loreArray);
             }
 
             if (meta.hasEnchants()) {
-                JSONObject enchantObject = new JSONObject();
+                JsonObject enchantObject = new JsonObject();
                 for (Map.Entry<Enchantment, Integer> entry : meta.getEnchants().entrySet()) {
-                    enchantObject.put(entry.getKey().getName(), entry.getValue());
+                    enchantObject.addProperty(entry.getKey().getName(), entry.getValue());
                 }
-                jsonObject.put("enchantments", enchantObject);
+                jsonObject.add("enchantments", enchantObject);
             }
         }
 
-        return jsonObject.toJSONString();
+        return jsonObject.getAsString();
     }
 
     /**
@@ -67,23 +66,22 @@ public class ItemParser {
      * @return The deserialized ItemStack, or null if the parsing fails.
      */
     public static ItemStack deserializeItemStack(String jsonString) {
-        JSONParser parser = new JSONParser();
         try {
-            JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+            JsonObject jsonObject = (JsonObject) JsonParser.parseString(jsonString);
 
-            Material material = Material.valueOf((String) jsonObject.get("material"));
-            int amount = ((Long) jsonObject.get("amount")).intValue();
+            Material material = Material.valueOf(jsonObject.get("material").getAsString());
+            int amount = (jsonObject.get("amount")).getAsInt();
 
             ItemStack itemStack = new ItemStack(material, amount);
 
-            if (jsonObject.containsKey("display_name")) {
+            if (jsonObject.has("display_name")) {
                 ItemMeta meta = itemStack.getItemMeta();
-                meta.setDisplayName((String) jsonObject.get("display_name"));
+                meta.setDisplayName(jsonObject.get("display_name").getAsString());
                 itemStack.setItemMeta(meta);
             }
 
-            if (jsonObject.containsKey("lore")) {
-                JSONArray loreArray = (JSONArray) jsonObject.get("lore");
+            if (jsonObject.has("lore")) {
+                JsonArray loreArray = (JsonArray) jsonObject.get("lore");
                 List<String> loreList = new ArrayList<>();
                 for (Object lore : loreArray) {
                     loreList.add((String) lore);
@@ -93,12 +91,11 @@ public class ItemParser {
                 itemStack.setItemMeta(meta);
             }
 
-            if (jsonObject.containsKey("enchantments")) {
-                JSONObject enchantObject = (JSONObject) jsonObject.get("enchantments");
-                for (Object key : enchantObject.keySet()) {
-                    String enchantmentName = (String) key;
-                    int enchantLevel = ((Long) enchantObject.get(key)).intValue();
-                    Enchantment enchantment = Enchantment.getByName(enchantmentName);
+            if (jsonObject.has("enchantments")) {
+                JsonObject enchantObject = (JsonObject) jsonObject.get("enchantments");
+                for (String key : enchantObject.keySet()) {
+                    int enchantLevel = enchantObject.get(key).getAsInt();
+                    Enchantment enchantment = Enchantment.getByName(key);
                     if (enchantment != null) {
                         itemStack.addUnsafeEnchantment(enchantment, enchantLevel);
                     }
@@ -106,10 +103,8 @@ public class ItemParser {
             }
 
             return itemStack;
-        } catch (ParseException | IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
         }
-
-        return null;
     }
 }
