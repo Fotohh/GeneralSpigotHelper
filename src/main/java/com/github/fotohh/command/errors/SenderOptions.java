@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender;
 public interface SenderOptions {
 
     /**
-     * Checks whether the given CommandSender is valid according to the defined rules.
+     * Checks whether the given CommandSender is valid, according to the defined rules.
      *
      * @param sender The CommandSender to be validated.
      * @return true if the CommandSender is valid, false otherwise.

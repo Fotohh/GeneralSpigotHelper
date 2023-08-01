@@ -43,6 +43,19 @@ public class CommandExecution {
     }
 
     /**
+     * Checks if the argument at the specified index is equal to the given string (equals-ignore-case).
+     *
+     * @param argument The index of the argument to compare.
+     * @param string   The string to compare with the argument.
+     * @return {@code true} if the argument at the specified index is equal to the given string (equals-ignore-case), {@code false} otherwise.
+     * @since 1.0.5
+     */
+    public boolean argumentEqualsString(int argument, String string) {
+        return args[argument].equalsIgnoreCase(string);
+    }
+
+
+    /**
      * Gets the CommandSender executing the command.
      *
      * @return The CommandSender instance.

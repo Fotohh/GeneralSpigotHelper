@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  *
  * @since 1.0.4
  */
-public class ConsoleOnly extends CommandError implements SenderOptions {
+public class ConsoleOnly implements SenderOptions {
 
     /**
      * Checks whether the given CommandSender is the console, validating that the command can only be executed by the console.

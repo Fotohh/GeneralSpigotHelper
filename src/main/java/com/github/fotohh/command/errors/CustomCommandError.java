@@ -18,7 +18,7 @@ public interface CustomCommandError {
      * @param command The executed command.
      * @param label   The command's label (i.e., its alias).
      * @param args    The arguments provided with the command.
-     * @return true if the error was handled and further command processing should stop, false otherwise.
+     * @return true, if the error was handled and further command processing should stop, false otherwise.
      * @since 1.0.4
      */
     boolean handle(CommandSender sender, Command command, String label, String[] args);

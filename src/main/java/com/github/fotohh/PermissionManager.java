@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * The PermissionManager class provides utility methods for handling player permissions in Bukkit.
- * It allows checking, granting, and revoking permissions for players.
+ * It allows checking, granting it, and revoking permissions for players.
  */
 public class PermissionManager {
 

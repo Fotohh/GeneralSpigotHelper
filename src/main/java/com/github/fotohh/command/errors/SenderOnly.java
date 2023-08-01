@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  *
  * @since 1.0.4
  */
-public class SenderOnly extends CommandError implements SenderOptions {
+public class SenderOnly implements SenderOptions {
 
     /**
      * Checks whether the given CommandSender is a player, validating that the command can only be executed by players.

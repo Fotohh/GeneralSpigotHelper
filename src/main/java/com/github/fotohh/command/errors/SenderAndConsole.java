@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
  *
  * @since 1.0.4
  */
-public class SenderAndConsole extends CommandError implements SenderOptions {
+public class SenderAndConsole implements SenderOptions {
 
     /**
      * Allows the command to be executed by any type of CommandSender (players and the console).

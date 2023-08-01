@@ -6,7 +6,7 @@ package com.github.fotohh.command.errors;
  *
  * @since 1.0.4
  */
-public class NotEnoughArguments extends CommandError {
+public class NotEnoughArguments {
 
     private int length;
 
