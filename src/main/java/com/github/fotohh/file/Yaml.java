@@ -1,14 +1,20 @@
 package com.github.fotohh.file;
 
-import org.bukkit.Location;
-import org.bukkit.World;
+import com.github.fotohh.utility.GeneralUtility;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * An additional helper which adds some methods.
@@ -19,12 +25,22 @@ public class Yaml extends YamlConfiguration {
         super();
     }
 
+    public ConfigurationSection createNumberedSection(String baseSectionName) {
+        int sectionNumber = 1;
+        while (isConfigurationSection(baseSectionName + "." + sectionNumber)) {
+            sectionNumber++;
+        }
+        return createSection(baseSectionName + "." + sectionNumber);
+    }
+
     /**
      Adds a new number section to the specified YMLFile's configuration under the provided section.
      If the section doesn't exist, it will be created.
+     @deprecated Use {@link #createNumberedSection(String)} instead of this.
      @param section The section
-     @return The newly created ConfigurationSection. if section is null method returns null
+     @return The newly created ConfigurationSection. If a section is null method returns null
      */
+    @Deprecated
     public static ConfigurationSection addNumberedSection(ConfigurationSection section){
         if(section == null) return null;
         int i;
@@ -36,7 +52,7 @@ public class Yaml extends YamlConfiguration {
     }
 
     /**
-     * Converts integer list to org.Bukkit.Location();
+     * Converts an integer list to org.Bukkit.Location();
      * @param world param for location
      * @param doubleList integer list
      * @return location or else null
@@ -141,5 +157,159 @@ public class Yaml extends YamlConfiguration {
         return findNestedSection(parentSectionName, this);
     }
 
+    public Color stringToColor(String msg){
+        switch (msg.toUpperCase()){
+            case "RED": return Color.RED;
+            case "ORANGE": return Color.ORANGE;
+            case "YELLOW": return Color.YELLOW;
+            case "GREEN": return Color.GREEN;
+            case "BLUE": return Color.BLUE;
+            case "PURPLE":  return Color.PURPLE;
+            case "BLACK": return Color.BLACK;
+            case "AQUA": return Color.AQUA;
+            case "FUCHISA":return Color.FUCHSIA;
+            case "GRAY":return Color.GRAY;
+            case "LIME":return Color.LIME;
+            case "MAROON":return Color.MAROON;
+            case "NAVY":return Color.NAVY;
+            case "OLIVE":return Color.OLIVE;
+            case "SILVER":return Color.SILVER;
+            case "TEAL":return Color.TEAL;
+            case "WHITE":return Color.WHITE;
+            default: throw new IllegalStateException("Unexpected value: " + msg);
+        }
+    }
+    public void set(String path, Material material){
+        set(path, material.toString());
+    }
+    public Material getMaterial(String path){
+        return Material.getMaterial(getString(path));
+    }
+
+    public void set(String path, Color color){
+        set(path, color.toString().toUpperCase());
+    }
+    @Override
+    public Color getColor(@NotNull String path){
+        return stringToColor(getString(path));
+    }
+    public World getWorld(String path){
+        UUID uuid = UUID.fromString(getString(path));
+        return Bukkit.getWorld(uuid);
+    }
+
+    public void setWorld(String path, World world){
+        set(path, world.getUID().toString());
+    }
+    public void set(String path, ItemStack itemStack){
+        ConfigurationSection itemSection = getOrCreateSection(path);
+        Material material = itemStack.getType();
+        set(itemSection.getCurrentPath() + ".material", material);
+
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta != null) {
+            itemSection.set("displayName", itemMeta.getDisplayName());
+            itemSection.set("lore", itemMeta.getLore());
+
+            Map<Enchantment, Integer> enchantments = itemStack.getEnchantments();
+            List<String> enchantmentList = new ArrayList<>();
+            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                Enchantment enchantment = entry.getKey();
+                int level = entry.getValue();
+                enchantmentList.add(enchantment.getKey().getNamespace() + enchantment.getKey().getKey() + ":" + level);
+            }
+            itemSection.set("enchantments", enchantmentList);
+        }
+    }
+    @Override
+    public ItemStack getItemStack(@NotNull String path) {
+        ConfigurationSection section = getOrCreateSection(path);
+
+        ConfigurationSection itemSection = section.getConfigurationSection(path);
+        String currentPath = itemSection.getCurrentPath();
+
+        Material material = getMaterial(currentPath + ".material");
+        ItemStack itemStack = new ItemStack(material);
+        ItemMeta meta = itemStack.getItemMeta();
+        if (meta == null) return null;
+
+        String name = itemSection.getString("displayName");
+        meta.setDisplayName(name);
+
+        List<String> lore = itemSection.getStringList("lore");
+        meta.setLore(lore.stream().map(GeneralUtility::chat).collect(Collectors.toList()));
+
+        List<String> enchantments = itemSection.getStringList("enchantments");
+        for (String enchant : enchantments) {
+            String[] data = enchant.split(":");
+            int level = Integer.parseInt(data[2]);
+            String enchantmentName = data[1];
+            itemStack.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft(enchantmentName)), level);
+        }
+
+        itemStack.setItemMeta(meta);
+        return itemStack;
+    }
+    public void set(String path, Location location){
+        ConfigurationSection locSection = getOrCreateSection(path);
+        locSection.set("coordinates", Arrays.asList(location.getX(), location.getY(), location.getZ()));
+        locSection.set("world", location.getWorld().getUID().toString());
+    }
+    @Override
+    public Location getLocation(@NotNull String path){
+        List<Double> list = getConfigurationSection(path).getDoubleList("coordinates");
+        UUID uuid = UUID.fromString(getConfigurationSection(path).getString("uuid"));
+        return new Location(Bukkit.getWorld(uuid),list.get(0),list.get(1),list.get(2));
+    }
+
+    public void set(String path, Player player){
+        set(path, player.getUniqueId());
+    }
+    public Player getPlayer(String path){
+        return Bukkit.getPlayer(UUID.fromString(getString(path)));
+    }
+    public void set(String path, OfflinePlayer player){
+        set(path, player.getUniqueId());
+    }
+    @Override
+    public OfflinePlayer getOfflinePlayer(String path){
+        return Bukkit.getOfflinePlayer(UUID.fromString(getString(path)));
+    }
+
+    public void set(String path, Inventory inventory, String title){
+        ConfigurationSection section = getOrCreateSection(path);
+        int size = inventory.getSize();
+        section.set("inventory_title", title);
+        section.set("inventory_size", size);
+        section.set("inventory_type", inventory.getType().name());
+        ConfigurationSection itemSection = getOrCreateSection(path + ".items");
+        for(int i = 0; i < size; i++){
+            ItemStack[] items = inventory.getContents();
+            set(itemSection.getCurrentPath() +"."+i, items[i]);
+        }
+    }
+
+    public Inventory getInventory(String path){
+        Inventory inventory;
+        boolean sizeIsNotNull = get(path + ".inventory_size") == null;
+        String title = getString(path + ".inventory_title");
+        Map<Integer, ItemStack> items = new HashMap<>();
+        for(String key : getConfigurationSection(path + ".items").getKeys(false)){
+            int i = Integer.parseInt(key);
+            items.put(i,getItemStack(key));
+        }
+        if(!sizeIsNotNull) {
+            int size = getInt(path + ".inventory_size");
+            inventory = Bukkit.createInventory(null, size, title);
+
+        }else {
+            InventoryType type = InventoryType.valueOf(getString(path + ".inventory_type"));
+            inventory = Bukkit.createInventory(null, type, title);
+        }
+        for(int key : items.keySet()){
+            inventory.setItem(key, items.get(key));
+        }
+        return inventory;
+    }
 
 }
