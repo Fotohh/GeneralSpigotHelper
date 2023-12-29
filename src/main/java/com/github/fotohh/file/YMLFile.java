@@ -1,6 +1,6 @@
 package com.github.fotohh.file;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,7 +36,12 @@ public class YMLFile extends File {
     public YMLFile(String path, Defaults defaults) {
         super(path);
         this.defaults = defaults;
-        this.config = (Yaml) YamlConfiguration.loadConfiguration(this);
+        this.config = new Yaml();
+        try {
+            this.config.load(this);
+        } catch (IOException | InvalidConfigurationException e) {
+            throw new RuntimeException(e);
+        }
         if(loadDefaults())
             save();
     }
