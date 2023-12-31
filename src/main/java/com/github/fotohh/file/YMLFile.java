@@ -35,6 +35,13 @@ public class YMLFile extends File {
      */
     public YMLFile(String path, Defaults defaults) {
         super(path);
+        if(!exists()) {
+            try {
+                createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         this.defaults = defaults;
         this.config = new Yaml();
         try {
