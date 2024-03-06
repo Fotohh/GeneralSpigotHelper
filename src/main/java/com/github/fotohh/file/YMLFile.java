@@ -24,7 +24,7 @@ public class YMLFile extends File {
      * @param path The path to the file.
      */
     public YMLFile(String path) {
-        this(path, (Defaults) null);
+        this(new File(path), (Defaults) null);
     }
 
     /**
@@ -33,8 +33,14 @@ public class YMLFile extends File {
      * @param path The path to the file.
      * @param defaults defaults of the {@link YMLFile}
      */
-    public YMLFile(String path, Defaults defaults) {
-        super(path);
+    public YMLFile(File path, Defaults defaults) {
+        super(path.getPath());
+
+        File folder = path.getParentFile();
+        if(folder == null || !folder.exists()){
+            folder.mkdirs();
+        }
+
         if(!exists()) {
             try {
                 createNewFile();
@@ -68,7 +74,7 @@ public class YMLFile extends File {
      * @param fileName The name of the file, extension required.
      */
     public YMLFile(String dir, String fileName) {
-        this(new File(dir, fileName), null);
+        this(new File(dir, fileName), (Defaults) null);
     }
 
     /**
@@ -88,7 +94,7 @@ public class YMLFile extends File {
      * @param defaults defaults of the {@link YMLFile}
      */
     public YMLFile(String path, String fileName, Defaults defaults) {
-        this(new File(path, fileName).getPath(), defaults);
+        this(new File(path, fileName), defaults);
     }
 
     /**
