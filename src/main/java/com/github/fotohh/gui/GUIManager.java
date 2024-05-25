@@ -37,11 +37,13 @@ public class GUIManager {
                 return new AnvilGUI(player, title, plugin);
             case WORKBENCH:
                 return new WorkbenchGUI(player, title, plugin);
-            case CREATIVE:
-                return new CreativeGUI(player, title, plugin);
             default:
                 throw new IllegalArgumentException("Invalid GUIType provided.");
         }
+    }
+
+    public GUI createPaginationGUI(String title, Player player, int size){
+        return new PaginationGUI(player, title, size, plugin);
     }
 
     /**

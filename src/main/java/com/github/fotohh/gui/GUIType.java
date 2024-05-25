@@ -20,9 +20,4 @@ public enum GUIType {
      * Represents a Workbench GUI type.
      */
     WORKBENCH,
-
-    /**
-     * Represents a Creative GUI type.
-     */
-    CREATIVE
 }

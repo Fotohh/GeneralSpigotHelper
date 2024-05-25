@@ -9,6 +9,7 @@ package com.github.fotohh.gui;
 import com.github.fotohh.itemutil.ItemManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -33,14 +34,11 @@ public interface GUI extends Listener {
     Inventory getInventory();
 
     /**
-     * Update the content of the GUI. Not required but highly advised.
-     */
-    default void updateGUI(){}
-
-    /**
      * Open the GUI for the owner (Player).
      */
-    void openGUI();
+    default void openGUI(){
+        getOwner().openInventory(getInventory());
+    }
 
     /**
      * Get the title of the GUI.
@@ -97,7 +95,9 @@ public interface GUI extends Listener {
      * Unregister the GUI as a listener for event handling.
      * This should be called when the GUI is no longer needed to avoid memory leaks.
      */
-    void unregisterListener();
+    default void unregisterListener(){
+        HandlerList.unregisterAll(this);
+    };
 
     /**
      * Gets the ItemManager instance for managing ItemEvents associated with this GUI.
