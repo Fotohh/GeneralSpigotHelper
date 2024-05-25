@@ -107,9 +107,16 @@ public class PaginationGUI implements GUI{
     private void updateInventory(){
         inventory.clear();
         int count = (itemsPerPage - 1)  * pageNumber;
-        for(int i = count; i < count + itemsPerPage; i++){
-            int index = i - count;
-            inventory.setItem(index, items.get(i));
+        int preCount = 0;
+        for(ItemStack itemStack : items) {
+            if(preCount < count) {
+                preCount++;
+                continue;
+            }
+            if(preCount < count + itemsPerPage ){
+                inventory.addItem(itemStack);
+                preCount++;
+            }
         }
         int forwardIndex = itemsPerPage-1;
         int backwardIndex = itemsPerPage-10;
