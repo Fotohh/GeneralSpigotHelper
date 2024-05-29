@@ -36,11 +36,6 @@ public class CustomChestGUI implements Listener,GUI {
     }
 
     @Override
-    public void unregisterListener() {
-        HandlerList.unregisterAll(this);
-    }
-
-    @Override
     public Inventory getInventory() {
         return inventory;
     }
@@ -63,15 +58,5 @@ public class CustomChestGUI implements Listener,GUI {
     @Override
     public Consumer<InventoryClickEvent> getConsumer() {
         return clickEventConsumer;
-    }
-
-    @EventHandler
-    @Override
-    public void handleClickEvent(InventoryClickEvent event) {
-        if (event.getInventory() == inventory) {
-            if (clickEventConsumer != null) {
-                clickEventConsumer.accept(event);
-            }
-        }
     }
 }

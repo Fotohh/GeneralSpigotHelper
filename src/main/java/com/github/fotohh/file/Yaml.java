@@ -34,24 +34,6 @@ public class Yaml extends YamlConfiguration {
     }
 
     /**
-     Adds a new number section to the specified YMLFile's configuration under the provided section.
-     If the section doesn't exist, it will be created.
-     @deprecated Use {@link #createNumberedSection(String)} instead of this.
-     @param section The section
-     @return The newly created ConfigurationSection. If a section is null method returns null
-     */
-    @Deprecated
-    public static ConfigurationSection addNumberedSection(ConfigurationSection section){
-        if(section == null) return null;
-        int i;
-        i = section.getKeys(false).stream()
-                .mapToInt(Integer::parseInt)
-                .max()
-                .orElse(0) + 1;
-        return section.createSection(String.valueOf(i));
-    }
-
-    /**
      * Converts an integer list to org.Bukkit.Location();
      * @param world param for location
      * @param doubleList integer list
@@ -83,7 +65,7 @@ public class Yaml extends YamlConfiguration {
      * @param sectionName The name of the section.
      * @return The configuration section.
      */
-    public @Nullable ConfigurationSection getOrCreateSection(String sectionName) {
+    public @NotNull ConfigurationSection getOrCreateSection(String sectionName) {
         ConfigurationSection section = getConfigurationSection(sectionName);
         if (section == null) {
             section = createSection(sectionName);
@@ -91,7 +73,7 @@ public class Yaml extends YamlConfiguration {
         return section;
     }
 
-    public ConfigurationSection getOrCreateSection(@NotNull ConfigurationSection parentSection, String sectionName) {
+    public @NotNull ConfigurationSection getOrCreateSection(@NotNull ConfigurationSection parentSection, String sectionName) {
         ConfigurationSection section = parentSection.getConfigurationSection(sectionName);
         if (section == null) {
             section = parentSection.createSection(sectionName);
