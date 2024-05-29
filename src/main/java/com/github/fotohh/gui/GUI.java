@@ -14,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Consumer;
 
@@ -89,6 +90,10 @@ public interface GUI extends Listener {
         if(event.getInventory() == getInventory()){
             unregisterListener();
         }
+    }
+
+    default void registerListener(JavaPlugin plugin){
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /**

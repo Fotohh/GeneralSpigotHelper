@@ -25,6 +25,7 @@ public class PaginationGUI implements GUI{
     private Consumer<InventoryClickEvent> clickEventConsumer;
     private final ItemManager itemManager;
     private ItemBuilder forwardButton;
+    private final int size;
     private ItemBuilder backwardsButton;
     private ItemBuilder pageNumberItem;
     private final List<ItemStack> items = new ArrayList<>();
@@ -53,6 +54,7 @@ public class PaginationGUI implements GUI{
         this.player = player;
         this.itemManager = new ItemManager(this);
         this.title = title;
+        this.size = size;
         this.pageNumber = 0;
         this.itemsPerPage = size-9;
         this.inventory = Bukkit.createInventory(player, size, title);
@@ -118,9 +120,9 @@ public class PaginationGUI implements GUI{
                 preCount++;
             }
         }
-        int forwardIndex = itemsPerPage-1;
-        int backwardIndex = itemsPerPage-10;
-        int pageNumberIndex = itemsPerPage-5;
+        int forwardIndex = size-1;
+        int backwardIndex = size-10;
+        int pageNumberIndex = size-5;
         inventory.setItem(forwardIndex, forwardButton);
         inventory.setItem(backwardIndex, backwardsButton);
         inventory.setItem(pageNumberIndex, pageNumberItem);
@@ -159,7 +161,7 @@ public class PaginationGUI implements GUI{
      */
     @Override
     public void onInventoryClick(Consumer<InventoryClickEvent> event) {
-        this.clickEventConsumer = clickEventConsumer;
+        this.clickEventConsumer = event;
     }
 
     @Override
