@@ -105,7 +105,7 @@ public class PaginationGUI implements GUI{
         player.openInventory(inventory);
     }
 
-    private void updateInventory(){
+    public void updateInventory(){
         inventory.clear();
         int count = (itemsPerPage - 1)  * pageNumber;
         int preCount = 0;
