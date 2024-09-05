@@ -7,6 +7,7 @@
 package com.github.fotohh.gui;
 
 import com.github.fotohh.itemutil.ItemManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
@@ -18,27 +19,55 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Consumer;
 
-public interface GUI extends Listener {
+public class GUI {
+
+    protected final Player player;
+    protected final ItemManager itemManager;
+    protected final String title;
+    protected Inventory inventory;
+    private Consumer<InventoryClickEvent> consumer;
+
+    /**
+     * Constructs a GUI object with the specified Player, title, size, and GUIManager.
+     * The GUI is registered with the GUIManager upon creation.
+     * The GUI's inventory is created with the specified size and title.
+     *
+     * @param player The Player who owns the GUI.
+     * @param title The title of the GUI.
+     * @param size The size of the GUI inventory.
+     * @param manager The GUIManager associated with the GUI.
+     */
+    public GUI(Player player, String title, int size, GUIManager manager){
+        manager.register(this);
+        this.player = player;
+        this.itemManager = new ItemManager(this);
+        this.title = title;
+        this.inventory = Bukkit.createInventory(player, size, title);
+    }
 
     /**
      * Get the owner (Player) of this GUI.
      *
      * @return The Player who owns this GUI.
      */
-    Player getOwner();
+    public Player getOwner(){
+        return player;
+    }
 
     /**
      * Get the underlying Inventory associated with this GUI.
      *
      * @return The Inventory object representing this GUI.
      */
-    Inventory getInventory();
+    public Inventory getInventory(){
+        return inventory;
+    }
 
     /**
      * Open the GUI for the owner (Player).
      */
-    default void openGUI(){
-        getOwner().openInventory(getInventory());
+    public void openGUI(){
+        player.openInventory(inventory);
     }
 
     /**
@@ -46,7 +75,9 @@ public interface GUI extends Listener {
      *
      * @return The title of the GUI.
      */
-    String getTitle();
+    public String getTitle(){
+        return title;
+    }
 
     /**
      * Gets the Consumer for handling InventoryClickEvent in the GUI.
@@ -54,7 +85,9 @@ public interface GUI extends Listener {
      * @return The Consumer for InventoryClickEvent, or null if none is set.
      * @since 1.0.2
      */
-    Consumer<InventoryClickEvent> getConsumer();
+    protected Consumer<InventoryClickEvent> getConsumer(){
+        return consumer;
+    }
 
     /**
      * Set a custom action to be executed when an InventoryClickEvent occurs.
@@ -62,7 +95,9 @@ public interface GUI extends Listener {
      *
      * @param event The custom action to be executed on InventoryClickEvent.
      */
-    void onInventoryClick(Consumer<InventoryClickEvent> event);
+    public void onInventoryClick(Consumer<InventoryClickEvent> event){
+        consumer = event;
+    }
 
     /**
      * Handles the InventoryClickEvent for this GUI.
@@ -76,33 +111,14 @@ public interface GUI extends Listener {
      * @see #onInventoryClick(Consumer)
      * @since 1.0.2
      */
-    @EventHandler
-    default void handleClickEvent(InventoryClickEvent event){
-        if (event.getInventory() == getInventory()) {
-            if (getConsumer() != null) {
-                getConsumer().accept(event);
+    protected void handleClickEvent(InventoryClickEvent event){
+        if (event.getInventory().equals(inventory)) {
+            if (consumer != null) {
+                consumer.accept(event);
             }
         }
     };
 
-    @EventHandler
-    default void unregister(InventoryCloseEvent event){
-        if(event.getInventory() == getInventory()){
-            unregisterListener();
-        }
-    }
-
-    default void registerListener(JavaPlugin plugin){
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-
-    /**
-     * Unregister the GUI as a listener for event handling.
-     * This should be called when the GUI is no longer needed to avoid memory leaks.
-     */
-    default void unregisterListener(){
-        HandlerList.unregisterAll(this);
-    };
 
     /**
      * Gets the ItemManager instance for managing ItemEvents associated with this GUI.
@@ -110,6 +126,8 @@ public interface GUI extends Listener {
      * @return The ItemManager associated with this GUI.
      * @since 1.0.4
      */
-    ItemManager getItemManager();
+    public ItemManager getItemManager(){
+        return itemManager;
+    }
 
 }

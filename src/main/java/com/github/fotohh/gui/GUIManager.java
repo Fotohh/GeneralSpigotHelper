@@ -1,15 +1,21 @@
-/**
- * The GUIManager class is responsible for creating various types of GUIs for a Bukkit plugin.
- * It allows the creation of predefined GUI types (Chest, Anvil, Workbench, Creative), as well as custom Chest GUIs.
- */
+
 package com.github.fotohh.gui;
 
-import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class GUIManager {
+import java.util.LinkedList;
 
-    private final JavaPlugin plugin;
+/**
+ * The GUIManager class is responsible for creating various types of GUIs for a Bukkit plugin.
+ * This streamlines the creation process of GUI's and manages the GUI's that are currently open.
+ */
+public class GUIManager implements Listener {
+
+    private final LinkedList<GUI> GUIList = new LinkedList<>();
 
     /**
      * Constructs a GUIManager object with the specified JavaPlugin instance.
@@ -17,44 +23,63 @@ public class GUIManager {
      * @param plugin The JavaPlugin instance that the GUIManager is associated with.
      */
     public GUIManager(JavaPlugin plugin) {
-        this.plugin = plugin;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     /**
-     * Creates a specific type of GUI based on the provided GUIType.
+     * Registers a GUI with the GUIManager.
      *
-     * @param type   The type of GUI to create (CHEST, ANVIL, WORKBENCH, or CREATIVE).
-     * @param player The player for whom the GUI is being created.
-     * @param title  The title of the GUI.
-     * @return The created GUI object.
-     * @throws IllegalArgumentException If an invalid GUIType is provided.
+     * @param gui The GUI object to register.
      */
-    public GUI createGUI(GUIType type, Player player, String title) {
-        switch (type) {
-            case CHEST:
-                return new ChestGUI(player, title, plugin);
-            case ANVIL:
-                return new AnvilGUI(player, title, plugin);
-            case WORKBENCH:
-                return new WorkbenchGUI(player, title, plugin);
-            default:
-                throw new IllegalArgumentException("Invalid GUIType provided.");
-        }
-    }
-
-    public GUI createPaginationGUI(String title, Player player, int size){
-        return new PaginationGUI(player, title, size, plugin);
+    public void register(GUI gui) {
+        if(!GUIList.contains(gui)) GUIList.add(gui);
     }
 
     /**
-     * Creates a custom Chest GUI with the specified size, title, and associated player.
+     * Unregisters a GUI with the GUIManager.
      *
-     * @param size   The size of the custom Chest GUI.
-     * @param title  The title of the custom Chest GUI.
-     * @param player The player for whom the custom Chest GUI is being created.
-     * @return The created CustomChestGUI object.
+     * @param gui The GUI object to unregister.
      */
-    public GUI createCustomChestGUI(int size, String title, Player player) {
-        return new CustomChestGUI(player, title, size, plugin);
+    public void unregister(GUI gui) {
+        GUIList.remove(gui);
+    }
+
+    /**
+     * Unregisters all GUIs with the GUIManager.
+     */
+    public void unregisterAll() {
+        GUIList.clear();
+    }
+
+    /**
+     * Get the list of GUIs that are currently registered with the GUIManager.
+     *
+     * @return A LinkedList of GUI objects that are currently registered.
+     */
+    public LinkedList<GUI> getGUIList() {
+        return GUIList;
+    }
+
+    /**
+     * Handles the InventoryCloseEvent for all GUIs that are currently registered.
+     * @param event The InventoryCloseEvent that was triggered.
+     */
+    @EventHandler
+    public void onInventoryClose(InventoryCloseEvent event) {
+        GUIList.forEach(gui -> {
+            if(event.getInventory().equals(gui.getInventory())) unregister(gui);
+        });
+    }
+
+    /**
+     * Handles the InventoryClickEvent for all GUIs that are currently registered.
+     * @param event The InventoryClickEvent that was triggered.
+     */
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event){
+        GUIList.forEach(gui -> {
+            if(event.getInventory().equals(gui.getInventory()))
+                if(gui.getConsumer() != null) gui.handleClickEvent(event);
+        });
     }
 }

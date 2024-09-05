@@ -1,103 +1,118 @@
 package com.github.fotohh.gui;
 
 import com.github.fotohh.itemutil.ItemBuilder;
-import com.github.fotohh.itemutil.ItemManager;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class PaginationGUI implements GUI{
+/**
+ * The pagination GUI class represents a GUI with a fixed number of items per page.
+ * The GUI contains forward and backward buttons to navigate between pages.
+ * The GUI also contains a page number item to display the current page number.
+ * The GUI is registered with the GUIManager upon creation.
+ */
+public class PaginationGUI extends GUI{
 
-    private final Player player;
-    private final Inventory inventory;
     private int pageNumber;
     private final int itemsPerPage;
-    private final String title;
-    private Consumer<InventoryClickEvent> clickEventConsumer;
-    private final ItemManager itemManager;
     private ItemBuilder forwardButton;
     private final int size;
     private ItemBuilder backwardsButton;
     private ItemBuilder pageNumberItem;
     private final List<ItemStack> items = new ArrayList<>();
 
+    /**
+     * Get the forward button item.
+     * @return The forward button item.
+     */
     public ItemBuilder getForwardButton() {
         return forwardButton;
     }
 
+    /**
+     * Set the forward button item.
+     * @param forwardButton The forward button item.
+     */
     public void setForwardButton(ItemBuilder forwardButton) {
         this.forwardButton = forwardButton;
     }
 
+    /**
+     * Get the list of items in the GUI.
+     * @return The list of items in the GUI.
+     */
     public List<ItemStack> getItems() {
         return items;
     }
 
+    /**
+     * Set the backward button item.
+     * @param backwardsButton The backward button item.
+     */
     public void setBackwardsButton(ItemBuilder backwardsButton) {
         this.backwardsButton = backwardsButton;
     }
 
+    /**
+     * Get the backward button item.
+     * @return The backward button item.
+     */
     public ItemBuilder getBackwardsButton() {
         return backwardsButton;
     }
 
-    public PaginationGUI(Player player, String title, int size, JavaPlugin plugin){
-        this.player = player;
-        this.itemManager = new ItemManager(this);
-        this.title = title;
+    /**
+     * Constructs a PaginationGUI object with the specified Player, title, size, and GUIManager.
+     * @param player The Player who owns the GUI.
+     * @param title The title of the GUI.
+     * @param size The size of the GUI inventory.
+     * @param guiManager The GUIManager associated with the GUI.
+     */
+    public PaginationGUI(Player player, String title, int size, GUIManager guiManager){
+        super(player, title, size, guiManager);
         this.size = size;
         this.pageNumber = 0;
         this.itemsPerPage = size-9;
-        this.inventory = Bukkit.createInventory(player, size, title);
-        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    /**
+     * Set the page number item.
+     * @param pageNumberItem The page number item.
+     */
     public void setPageNumberItem(ItemBuilder pageNumberItem) {
         this.pageNumberItem = pageNumberItem;
     }
 
+    /**
+     * Get the page number item.
+     * @return The page number item.
+     */
     public ItemBuilder getPageNumberItem() {
         return pageNumberItem;
     }
 
+    /**
+     * Get the number of items per page.
+     * @return The number of items per page.
+     */
     public int getAmountOfItemsPerPage() {
         return itemsPerPage;
     }
 
+    /**
+     * Get the current page number.
+     * @return The current page number.
+     */
     public int getPageNumber() {
         return pageNumber;
     }
 
     /**
-     * Get the owner (Player) of this GUI.
-     *
-     * @return The Player who owns this GUI.
-     */
-    @Override
-    public Player getOwner() {
-        return player;
-    }
-
-    /**
-     * Get the underlying Inventory associated with this GUI.
-     *
-     * @return The Inventory object representing this GUI.
-     */
-    @Override
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    /**
-     * Open the GUI for the owner (Player).
+     * Updates the inventory using {@link #updateInventory()} and opens the GUI for the owner (Player).
+     * Opens the GUI for the owner (Player).
      */
     @Override
     public void openGUI() {
@@ -105,6 +120,9 @@ public class PaginationGUI implements GUI{
         player.openInventory(inventory);
     }
 
+    /**
+     * Updates the inventory with the items in the GUI, the forward and backward buttons, and the page number item.
+     */
     public void updateInventory(){
         inventory.clear();
         int count = (itemsPerPage - 1)  * pageNumber;
@@ -128,43 +146,18 @@ public class PaginationGUI implements GUI{
     }
 
     /**
-     * Get the title of the GUI.
-     *
-     * @return The title of the GUI.
+     * Adds an item to the GUI.
+     * @param itemStack The item to add to the GUI.
      */
-    @Override
-    public String getTitle() {
-        return title;
-    }
-
     public void addItem(ItemStack itemStack){
         getItems().add(itemStack);
     }
 
     /**
-     * Gets the Consumer for handling InventoryClickEvent in the GUI.
-     *
-     * @return The Consumer for InventoryClickEvent, or null if none is set.
-     * @since 1.0.2
+     * Handles the InventoryClickEvent for the GUI.
+     * @param event The InventoryClickEvent to handle.
      */
     @Override
-    public Consumer<InventoryClickEvent> getConsumer() {
-        return clickEventConsumer;
-    }
-
-    /**
-     * Set a custom action to be executed when an InventoryClickEvent occurs.
-     * The Consumer will receive the InventoryClickEvent as input.
-     *
-     * @param event The custom action to be executed on InventoryClickEvent.
-     */
-    @Override
-    public void onInventoryClick(Consumer<InventoryClickEvent> event) {
-        this.clickEventConsumer = event;
-    }
-
-    @Override
-    @EventHandler
     public void handleClickEvent(InventoryClickEvent event) {
 
         if (event.getInventory() != getInventory()) return;
@@ -190,16 +183,5 @@ public class PaginationGUI implements GUI{
             getConsumer().accept(event);
         }
 
-    }
-
-    /**
-     * Gets the ItemManager instance for managing ItemEvents associated with this GUI.
-     *
-     * @return The ItemManager associated with this GUI.
-     * @since 1.0.4
-     */
-    @Override
-    public ItemManager getItemManager() {
-        return itemManager;
     }
 }
