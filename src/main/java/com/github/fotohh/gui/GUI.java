@@ -24,6 +24,7 @@ public class GUI {
     protected final Player player;
     protected final ItemManager itemManager;
     protected final String title;
+    protected GUIManager manager;
     protected Inventory inventory;
     private Consumer<InventoryClickEvent> consumer;
 
@@ -38,8 +39,8 @@ public class GUI {
      * @param manager The GUIManager associated with the GUI.
      */
     public GUI(Player player, String title, int size, GUIManager manager){
-        manager.register(this);
         this.player = player;
+        this.manager = manager;
         this.itemManager = new ItemManager(this);
         this.title = title;
         this.inventory = Bukkit.createInventory(player, size, title);
@@ -67,6 +68,7 @@ public class GUI {
      * Open the GUI for the owner (Player).
      */
     public void openGUI(){
+        manager.register(this);
         player.openInventory(inventory);
     }
 
