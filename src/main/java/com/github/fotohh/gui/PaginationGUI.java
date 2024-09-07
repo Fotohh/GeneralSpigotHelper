@@ -117,7 +117,7 @@ public class PaginationGUI extends GUI{
     @Override
     public void openGUI() {
         updateInventory();
-        player.openInventory(inventory);
+        super.openGUI();
     }
 
     /**
@@ -160,7 +160,7 @@ public class PaginationGUI extends GUI{
     @Override
     public void handleClickEvent(InventoryClickEvent event) {
 
-        if (event.getInventory() != getInventory()) return;
+        if (!event.getInventory().equals(inventory)) return;
 
         if(event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
 
